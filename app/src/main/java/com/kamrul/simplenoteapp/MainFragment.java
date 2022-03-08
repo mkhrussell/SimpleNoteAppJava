@@ -21,22 +21,26 @@ import java.util.List;
 
 public class MainFragment extends Fragment {
 
-    private MainViewModel mViewModel;
+    private MainViewModel viewModel;
     private MainFragmentBinding binding;
+    private NotesListAdapter adapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = MainFragmentBinding.inflate(inflater, container, false);
-        mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         binding.recyclerView.setHasFixedSize(true);
         DividerItemDecoration divider = new DividerItemDecoration(getContext(), new LinearLayoutManager(getContext()).getOrientation());
         binding.recyclerView.addItemDecoration(divider);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mViewModel.notesList.observe(getViewLifecycleOwner(), new Observer<List<NoteEntity>>() {
+        viewModel.notesList.observe(getViewLifecycleOwner(), new Observer<List<NoteEntity>>() {
             @Override
-            public void onChanged(List<NoteEntity> noteEntities) {
-                Log.i("noteLogging", noteEntities.toString());
+            public void onChanged(List<NoteEntity> notesList) {
+                Log.i("noteLogging", notesList.toString());
+                adapter = new NotesListAdapter(notesList);
+                binding.recyclerView.setAdapter(adapter);
             }
         });
 
