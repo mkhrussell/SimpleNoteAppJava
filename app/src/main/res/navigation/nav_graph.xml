@@ -19,6 +19,11 @@
         android:id="@+id/editorFragment"
         android:name="com.kamrul.simplenoteapp.EditorFragment"
         android:label="editor_fragment"
-        tools:layout="@layout/editor_fragment" />
+        tools:layout="@layout/editor_fragment" >
+        <argument
+            android:name="noteId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 
 </navigation>

@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -39,6 +40,7 @@ public class MainFragment extends Fragment implements NotesListAdapter.ListItemL
             @Override
             public void onChanged(List<NoteEntity> notesList) {
                 Log.i(Constants.TAG, notesList.toString());
+
                 adapter = new NotesListAdapter(notesList, MainFragment.this);
                 binding.recyclerView.setAdapter(adapter);
             }
@@ -48,7 +50,11 @@ public class MainFragment extends Fragment implements NotesListAdapter.ListItemL
     }
 
     @Override
-    public void onItemClick(int noteId) {
+    public void onItemClick(View view, int noteId) {
         Log.i(Constants.TAG, "Note id: " + noteId);
+
+        MainFragmentDirections.ActionEditNote actionEditNote = MainFragmentDirections.actionEditNote();
+        actionEditNote.setNoteId(noteId);
+        Navigation.findNavController(view).navigate(actionEditNote);
     }
 }
