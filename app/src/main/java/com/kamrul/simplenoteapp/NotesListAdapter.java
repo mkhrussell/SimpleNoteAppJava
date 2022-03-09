@@ -13,10 +13,22 @@ import com.kamrul.simplenoteapp.databinding.ListItemBinding;
 import java.util.List;
 
 public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.ViewHolder> {
-    private final List<NoteEntity> notesList;
 
-    public NotesListAdapter(List<NoteEntity> notesList) {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        ListItemBinding binding;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            binding = ListItemBinding.bind(itemView);
+        }
+    }
+
+    private final List<NoteEntity> notesList;
+    private final ListItemListener listener;
+
+    public NotesListAdapter(List<NoteEntity> notesList, ListItemListener listener) {
         this.notesList = notesList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -30,6 +42,12 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         NoteEntity note = notesList.get(position);
         holder.binding.noteText.setText(note.getText());
+        holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onItemClick(note.getId());
+            }
+        });
     }
 
     @Override
@@ -37,12 +55,7 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.View
         return notesList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        ListItemBinding binding;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            binding = ListItemBinding.bind(itemView);
-        }
+    interface ListItemListener {
+        void onItemClick(int noteId);
     }
 }

@@ -19,7 +19,7 @@ import com.kamrul.simplenoteapp.databinding.MainFragmentBinding;
 
 import java.util.List;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements NotesListAdapter.ListItemListener {
 
     private MainViewModel viewModel;
     private MainFragmentBinding binding;
@@ -38,8 +38,8 @@ public class MainFragment extends Fragment {
         viewModel.notesList.observe(getViewLifecycleOwner(), new Observer<List<NoteEntity>>() {
             @Override
             public void onChanged(List<NoteEntity> notesList) {
-                Log.i("noteLogging", notesList.toString());
-                adapter = new NotesListAdapter(notesList);
+                Log.i(Constants.TAG, notesList.toString());
+                adapter = new NotesListAdapter(notesList, MainFragment.this);
                 binding.recyclerView.setAdapter(adapter);
             }
         });
@@ -47,4 +47,8 @@ public class MainFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @Override
+    public void onItemClick(int noteId) {
+        Log.i(Constants.TAG, "Note id: " + noteId);
+    }
 }
