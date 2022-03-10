@@ -1,11 +1,17 @@
 package com.kamrul.simplenoteapp.data;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.kamrul.simplenoteapp.Constants;
 
 import java.util.Date;
 
+@Entity(tableName = "notes")
 public class NoteEntity {
+    @PrimaryKey(autoGenerate = true)
     int id;
+
     Date date;
     String text;
 
