@@ -1,6 +1,8 @@
 package com.kamrul.simplenoteapp;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -73,9 +75,23 @@ public class MainFragment extends Fragment implements NotesListAdapter.ListItemL
         switch (item.getItemId()) {
             case R.id.action_sample_data:
                 return addSampleData();
+            case R.id.action_delete:
+                return deleteSelectedNotes();
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private boolean deleteSelectedNotes() {
+        viewModel.deleteNotes(adapter.getSelectedNotes());
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(() -> {
+            adapter.getSelectedNotes().clear();
+            requireActivity().invalidateOptionsMenu();
+        }, 100);
+
+        return true;
     }
 
     private boolean addSampleData() {

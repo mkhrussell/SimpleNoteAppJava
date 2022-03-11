@@ -2,6 +2,7 @@ package com.kamrul.simplenoteapp.data;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -25,4 +26,7 @@ public interface NoteDao {
 
     @Query("SELECT COUNT(*) FROM notes")
     int getCount();
+
+    @Delete
+    int deleteNotes(List<NoteEntity> selectedNotes);
 }

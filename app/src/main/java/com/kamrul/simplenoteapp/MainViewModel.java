@@ -26,11 +26,10 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void addSampleData() {
-        AppDatabase.databaseWriteExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                database.noteDao().insertNotes(SampleDataProvider.getNotes());
-            }
-        });
+        AppDatabase.databaseWriteExecutor.execute(() -> database.noteDao().insertNotes(SampleDataProvider.getNotes()));
+    }
+
+    public void deleteNotes(List<NoteEntity> selectedNotes) {
+        AppDatabase.databaseWriteExecutor.execute(() -> database.noteDao().deleteNotes(selectedNotes));
     }
 }
