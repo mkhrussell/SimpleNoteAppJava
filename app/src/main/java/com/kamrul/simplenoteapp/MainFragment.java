@@ -3,6 +3,9 @@ package com.kamrul.simplenoteapp;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -34,6 +37,7 @@ public class MainFragment extends Fragment implements NotesListAdapter.ListItemL
         if(actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
+        setHasOptionsMenu(true);
 
         binding = MainFragmentBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
@@ -43,7 +47,7 @@ public class MainFragment extends Fragment implements NotesListAdapter.ListItemL
         binding.recyclerView.addItemDecoration(divider);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        viewModel.notesList.observe(getViewLifecycleOwner(), new Observer<List<NoteEntity>>() {
+        viewModel.getNotesList().observe(getViewLifecycleOwner(), new Observer<List<NoteEntity>>() {
             @Override
             public void onChanged(List<NoteEntity> notesList) {
                 Log.i(Constants.TAG, notesList.toString());
@@ -54,6 +58,27 @@ public class MainFragment extends Fragment implements NotesListAdapter.ListItemL
         });
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_sample_data:
+                return addSampleData();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private boolean addSampleData() {
+        viewModel.addSampleData();
+        return true;
     }
 
     @Override

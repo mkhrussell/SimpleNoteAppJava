@@ -1,6 +1,7 @@
 package com.kamrul.simplenoteapp.data;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.kamrul.simplenoteapp.Constants;
@@ -19,10 +20,12 @@ public class NoteEntity {
         this(Constants.NEW_NOTE_ID, new Date(), "");
     }
 
+    @Ignore
     public NoteEntity(Date date, String text) {
         this(Constants.NEW_NOTE_ID, date, text);
     }
 
+    @Ignore
     public NoteEntity(int id, Date date, String text) {
         this.id = id;
         this.date = date;
