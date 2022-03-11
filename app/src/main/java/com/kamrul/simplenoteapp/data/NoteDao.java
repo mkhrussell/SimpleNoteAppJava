@@ -29,4 +29,7 @@ public interface NoteDao {
 
     @Delete
     int deleteNotes(List<NoteEntity> selectedNotes);
+
+    @Query("DELETE FROM notes")
+    int deleteAllNotes();
 }

@@ -77,9 +77,16 @@ public class MainFragment extends Fragment implements NotesListAdapter.ListItemL
                 return addSampleData();
             case R.id.action_delete:
                 return deleteSelectedNotes();
+            case R.id.action_delete_all_notes:
+                return deleteAllNotes();
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private boolean deleteAllNotes() {
+        viewModel.deleteAllNotes();
+        return true;
     }
 
     private boolean deleteSelectedNotes() {

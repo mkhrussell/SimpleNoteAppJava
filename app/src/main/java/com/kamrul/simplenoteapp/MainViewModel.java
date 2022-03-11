@@ -32,4 +32,8 @@ public class MainViewModel extends AndroidViewModel {
     public void deleteNotes(List<NoteEntity> selectedNotes) {
         AppDatabase.databaseWriteExecutor.execute(() -> database.noteDao().deleteNotes(selectedNotes));
     }
+
+    public void deleteAllNotes() {
+        AppDatabase.databaseWriteExecutor.execute(() -> database.noteDao().deleteAllNotes());
+    }
 }
