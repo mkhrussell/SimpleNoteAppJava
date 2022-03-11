@@ -47,14 +47,11 @@ public class MainFragment extends Fragment implements NotesListAdapter.ListItemL
         binding.recyclerView.addItemDecoration(divider);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        viewModel.getNotesList().observe(getViewLifecycleOwner(), new Observer<List<NoteEntity>>() {
-            @Override
-            public void onChanged(List<NoteEntity> notesList) {
-                Log.i(Constants.TAG, notesList.toString());
+        viewModel.getNotesList().observe(getViewLifecycleOwner(), notesList -> {
+            Log.i(Constants.TAG, notesList.toString());
 
-                adapter = new NotesListAdapter(notesList, MainFragment.this);
-                binding.recyclerView.setAdapter(adapter);
-            }
+            adapter = new NotesListAdapter(notesList, MainFragment.this);
+            binding.recyclerView.setAdapter(adapter);
         });
 
         return binding.getRoot();
@@ -62,7 +59,12 @@ public class MainFragment extends Fragment implements NotesListAdapter.ListItemL
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_main, menu);
+        int menuId = R.menu.menu_main;
+        if(adapter != null && !adapter.getSelectedNotes().isEmpty()) {
+            menuId = R.menu.menu_main_selected_items;
+        }
+
+        inflater.inflate(menuId, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -88,5 +90,10 @@ public class MainFragment extends Fragment implements NotesListAdapter.ListItemL
         MainFragmentDirections.ActionEditNote actionEditNote = MainFragmentDirections.actionEditNote();
         actionEditNote.setNoteId(noteId);
         Navigation.findNavController(view).navigate(actionEditNote);
+    }
+
+    @Override
+    public void onItemSelectionChanged() {
+        requireActivity().invalidateOptionsMenu();
     }
 }

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.kamrul.simplenoteapp.data.NoteEntity;
 import com.kamrul.simplenoteapp.databinding.ListItemBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.ViewHolder> {
@@ -25,6 +26,8 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.View
 
     private final List<NoteEntity> notesList;
     private final ListItemListener listener;
+
+    private final List<NoteEntity> selectedNotes = new ArrayList<NoteEntity>();
 
     public NotesListAdapter(List<NoteEntity> notesList, ListItemListener listener) {
         this.notesList = notesList;
@@ -42,12 +45,23 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         NoteEntity note = notesList.get(position);
         holder.binding.noteText.setText(note.getText());
-        holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onItemClick(view, note.getId());
+        holder.binding.getRoot().setOnClickListener(view -> listener.onItemClick(view, note.getId()));
+        holder.binding.fab.setOnClickListener(view -> {
+            if(selectedNotes.contains(note)) {
+                selectedNotes.remove(note);
+                holder.binding.fab.setImageResource(R.drawable.ic_note);
+            } else {
+                selectedNotes.add(note);
+                holder.binding.fab.setImageResource(R.drawable.ic_check);
             }
+            listener.onItemSelectionChanged();
         });
+
+        if(selectedNotes.contains(note)) {
+            holder.binding.fab.setImageResource(R.drawable.ic_check);
+        } else {
+            holder.binding.fab.setImageResource(R.drawable.ic_note);
+        }
     }
 
     @Override
@@ -55,7 +69,12 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.View
         return notesList.size();
     }
 
+    public List<NoteEntity> getSelectedNotes() {
+        return selectedNotes;
+    }
+
     interface ListItemListener {
         void onItemClick(View view, int noteId);
+        void onItemSelectionChanged();
     }
 }

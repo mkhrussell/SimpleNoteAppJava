@@ -23,9 +23,9 @@ public class SampleDataProvider {
     public static List<NoteEntity> getNotes() {
         List<NoteEntity> noteEntities = new ArrayList<>();
 
-        noteEntities.add(new NoteEntity(1, getDate(1L), sampleText1));
-        noteEntities.add(new NoteEntity(2, getDate(2L), sampleText2));
-        noteEntities.add(new NoteEntity(3, getDate(3L), sampleText3));
+        noteEntities.add(new NoteEntity(getDate(1L), sampleText1));
+        noteEntities.add(new NoteEntity(getDate(2L), sampleText2));
+        noteEntities.add(new NoteEntity(getDate(3L), sampleText3));
 
         return noteEntities;
     }
