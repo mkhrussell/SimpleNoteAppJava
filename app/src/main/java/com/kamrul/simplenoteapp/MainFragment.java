@@ -21,13 +21,16 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.kamrul.simplenoteapp.data.NoteEntity;
 import com.kamrul.simplenoteapp.databinding.MainFragmentBinding;
+
+import java.util.ArrayList;
 
 public class MainFragment extends Fragment implements NotesListAdapter.ListItemListener {
 
     private MainViewModel viewModel;
     private MainFragmentBinding binding;
-    private NotesListAdapter adapter;
+    private NotesListAdapter adapter = null;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -51,6 +54,13 @@ public class MainFragment extends Fragment implements NotesListAdapter.ListItemL
 
             adapter = new NotesListAdapter(notesList, MainFragment.this);
             binding.recyclerView.setAdapter(adapter);
+
+            if(savedInstanceState != null) {
+                ArrayList<NoteEntity> savedSelectedList = savedInstanceState.getParcelableArrayList(Constants.SELECTED_NOTES_KEY);
+                if (savedSelectedList != null) {
+                    adapter.getSelectedNotes().addAll(savedSelectedList);
+                }
+            }
         });
 
         binding.floatingActionButton.setOnClickListener(view -> {
@@ -58,6 +68,14 @@ public class MainFragment extends Fragment implements NotesListAdapter.ListItemL
         });
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(adapter != null) {
+            outState.putParcelableArrayList(Constants.SELECTED_NOTES_KEY, adapter.getSelectedNotes());
+        }
+        super.onSaveInstanceState(outState);
     }
 
     @Override

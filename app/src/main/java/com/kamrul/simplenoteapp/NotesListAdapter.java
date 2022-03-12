@@ -27,7 +27,7 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.View
     private final List<NoteEntity> notesList;
     private final ListItemListener listener;
 
-    private final List<NoteEntity> selectedNotes = new ArrayList<NoteEntity>();
+    private final ArrayList<NoteEntity> selectedNotes = new ArrayList<NoteEntity>();
 
     public NotesListAdapter(List<NoteEntity> notesList, ListItemListener listener) {
         this.notesList = notesList;
@@ -69,7 +69,7 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.View
         return notesList.size();
     }
 
-    public List<NoteEntity> getSelectedNotes() {
+    public ArrayList<NoteEntity> getSelectedNotes() {
         return selectedNotes;
     }
 

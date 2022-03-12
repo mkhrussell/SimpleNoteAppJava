@@ -6,4 +6,5 @@ final public class Constants {
     public final static String TAG = "noteLogging";
     public final static String NOTE_TEXT_KEY = "noteTextKey";
     public final static String CURSOR_POSITION_KEY = "cursorPositionKey";
+    public final static String SELECTED_NOTES_KEY = "selectedNotesKey";
 }
