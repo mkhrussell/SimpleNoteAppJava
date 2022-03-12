@@ -62,12 +62,32 @@ public class EditorFragment extends Fragment {
         });
 
         viewModel.getCurrentNote().observe(getViewLifecycleOwner(), note -> {
-            binding.editor.setText(note.getText());
+            String savedText = null;
+            int cursorPosition = -1;
+            if(savedInstanceState != null) {
+                savedText = savedInstanceState.getString(Constants.NOTE_TEXT_KEY);
+                cursorPosition = savedInstanceState.getInt(Constants.CURSOR_POSITION_KEY);
+            }
+            if(savedText != null) {
+                binding.editor.setText(note.getText());
+                if(cursorPosition >= 0)
+                    binding.editor.setSelection(cursorPosition);
+            } else {
+                binding.editor.setText(note.getText());
+            }
         });
 
         viewModel.getNoteById(args.getNoteId());
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString(Constants.NOTE_TEXT_KEY, binding.editor.getText().toString());
+        outState.putInt(Constants.CURSOR_POSITION_KEY, binding.editor.getSelectionStart());
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
