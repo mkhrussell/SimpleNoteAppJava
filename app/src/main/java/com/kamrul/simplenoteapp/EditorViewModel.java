@@ -33,4 +33,21 @@ public class EditorViewModel extends AndroidViewModel {
             currentNote.postValue(note);
         });
     }
+
+    public void updateNote() {
+        if(currentNote.getValue() != null) {
+            currentNote.getValue().setText(currentNote.getValue().getText().trim());
+            if(currentNote.getValue().getId() == Constants.NEW_NOTE_ID && currentNote.getValue().getText().isEmpty()){
+                return;
+            }
+
+            AppDatabase.databaseWriteExecutor.execute(() -> {
+                if(currentNote.getValue().getText().isEmpty()) {
+                    database.noteDao().deleteNote(currentNote.getValue());
+                } else {
+                    database.noteDao().insertNote(currentNote.getValue());
+                }
+            });
+        }
+    }
 }

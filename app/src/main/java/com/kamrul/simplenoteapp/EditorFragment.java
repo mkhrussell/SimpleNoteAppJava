@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,8 +18,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import com.kamrul.simplenoteapp.data.NoteEntity;
+import com.kamrul.simplenoteapp.databinding.ActivityMainBinding;
 import com.kamrul.simplenoteapp.databinding.EditorFragmentBinding;
 
 public class EditorFragment extends Fragment {
@@ -73,6 +76,14 @@ public class EditorFragment extends Fragment {
     }
 
     private boolean saveAndReturn() {
+        InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), 0);
+
+        if(viewModel.getCurrentNote().getValue() != null) {
+            viewModel.getCurrentNote().getValue().setText(binding.editor.getText().toString());
+            viewModel.updateNote();
+        }
+
         Navigation.findNavController(getActivity(), R.id.navHostFragment).navigateUp();
         return true;
     }
