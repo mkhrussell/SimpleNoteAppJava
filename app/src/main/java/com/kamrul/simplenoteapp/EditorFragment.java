@@ -42,11 +42,16 @@ public class EditorFragment extends Fragment {
         }
         setHasOptionsMenu(true);
 
+        args = EditorFragmentArgs.fromBundle(getArguments());
+        if(args.getNoteId() == Constants.NEW_NOTE_ID) {
+            requireActivity().setTitle(getString(R.string.new_note));
+        } else {
+            requireActivity().setTitle(getString(R.string.edit_note));
+        }
+
         viewModel = new ViewModelProvider(this).get(EditorViewModel.class);
 
         binding = EditorFragmentBinding.inflate(inflater, container, false);
-        args = EditorFragmentArgs.fromBundle(getArguments());
-
         binding.editor.setText("");
 
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {

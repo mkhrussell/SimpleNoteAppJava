@@ -45,7 +45,7 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         NoteEntity note = notesList.get(position);
         holder.binding.noteText.setText(note.getText());
-        holder.binding.getRoot().setOnClickListener(view -> listener.onItemClick(view, note.getId()));
+        holder.binding.getRoot().setOnClickListener(view -> listener.editNote(view, note.getId()));
         holder.binding.fab.setOnClickListener(view -> {
             if(selectedNotes.contains(note)) {
                 selectedNotes.remove(note);
@@ -74,7 +74,7 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.View
     }
 
     interface ListItemListener {
-        void onItemClick(View view, int noteId);
+        void editNote(View view, int noteId);
         void onItemSelectionChanged();
     }
 }

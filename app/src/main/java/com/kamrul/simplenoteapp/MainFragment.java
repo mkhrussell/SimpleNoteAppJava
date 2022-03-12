@@ -16,16 +16,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.kamrul.simplenoteapp.data.NoteEntity;
 import com.kamrul.simplenoteapp.databinding.MainFragmentBinding;
-
-import java.util.List;
 
 public class MainFragment extends Fragment implements NotesListAdapter.ListItemListener {
 
@@ -40,6 +36,7 @@ public class MainFragment extends Fragment implements NotesListAdapter.ListItemL
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
         setHasOptionsMenu(true);
+        requireActivity().setTitle(getString(R.string.app_name));
 
         binding = MainFragmentBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
@@ -54,6 +51,10 @@ public class MainFragment extends Fragment implements NotesListAdapter.ListItemL
 
             adapter = new NotesListAdapter(notesList, MainFragment.this);
             binding.recyclerView.setAdapter(adapter);
+        });
+
+        binding.floatingActionButton.setOnClickListener(view -> {
+            editNote(view, Constants.NEW_NOTE_ID);
         });
 
         return binding.getRoot();
@@ -107,7 +108,7 @@ public class MainFragment extends Fragment implements NotesListAdapter.ListItemL
     }
 
     @Override
-    public void onItemClick(View view, int noteId) {
+    public void editNote(View view, int noteId) {
         Log.i(Constants.TAG, "Note id: " + noteId);
 
         MainFragmentDirections.ActionEditNote actionEditNote = MainFragmentDirections.actionEditNote();
