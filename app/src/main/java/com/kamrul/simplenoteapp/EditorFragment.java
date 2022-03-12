@@ -3,6 +3,7 @@ package com.kamrul.simplenoteapp;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -17,11 +18,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.kamrul.simplenoteapp.data.NoteEntity;
 import com.kamrul.simplenoteapp.databinding.EditorFragmentBinding;
 
 public class EditorFragment extends Fragment {
 
-    private EditorViewModel mViewModel;
+    private EditorViewModel viewModel;
     private EditorFragmentArgs args;
     private EditorFragmentBinding binding;
 
@@ -37,11 +39,12 @@ public class EditorFragment extends Fragment {
         }
         setHasOptionsMenu(true);
 
+        viewModel = new ViewModelProvider(this).get(EditorViewModel.class);
+
         binding = EditorFragmentBinding.inflate(inflater, container, false);
-        mViewModel = new ViewModelProvider(this).get(EditorViewModel.class);
         args = EditorFragmentArgs.fromBundle(getArguments());
 
-        binding.editor.setText("You selected note # " + args.getNoteId());
+        binding.editor.setText("");
 
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
@@ -49,6 +52,12 @@ public class EditorFragment extends Fragment {
                 saveAndReturn();
             }
         });
+
+        viewModel.getCurrentNote().observe(getViewLifecycleOwner(), note -> {
+            binding.editor.setText(note.getText());
+        });
+
+        viewModel.getNoteById(args.getNoteId());
 
         return binding.getRoot();
     }

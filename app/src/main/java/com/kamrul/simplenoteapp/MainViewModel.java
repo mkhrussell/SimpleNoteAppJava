@@ -2,6 +2,7 @@ package com.kamrul.simplenoteapp;
 
 import android.app.Application;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
@@ -15,7 +16,7 @@ public class MainViewModel extends AndroidViewModel {
     private final AppDatabase database;
     private final LiveData<List<NoteEntity>> notesList;
 
-    public MainViewModel(Application app) {
+    public MainViewModel(@NonNull Application app) {
         super(app);
         this.database = AppDatabase.getInstance(app);
         this.notesList = database.noteDao().getAll();
